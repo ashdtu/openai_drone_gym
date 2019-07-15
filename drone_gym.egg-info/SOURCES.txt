@@ -1,0 +1,7 @@
+README.md
+setup.py
+drone_gym.egg-info/PKG-INFO
+drone_gym.egg-info/SOURCES.txt
+drone_gym.egg-info/dependency_links.txt
+drone_gym.egg-info/requires.txt
+drone_gym.egg-info/top_level.txt

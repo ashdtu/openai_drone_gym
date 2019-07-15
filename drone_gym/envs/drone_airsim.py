@@ -57,7 +57,7 @@ class DroneAirsim(gym.Env):
 
 		self.action_space = spaces.Discrete(3)
 		self.action_dim = self.action_space.n
-		self.observation_space = spaces.Box(low=np.array([0]), high=np.array([255]),shape=[self.num_frames,self.img_shape[0],self.img_shape[1]],dtype=np.uint8)
+		self.observation_space = spaces.Box(low=0, high=255,shape=[self.num_frames,self.img_shape[0],self.img_shape[1]],dtype=np.uint8)
 
 
 	"""Helper functions for self.step() """
@@ -209,7 +209,7 @@ class DroneAirsim(gym.Env):
 		return reward,eps_end
 
 	def getPose(self):
-		return np.array([self.client.simGetVehiclePose().position.x_val,self.client.simGetVehiclePose().position.y_val])
+		return np.array([self.client.simGetVehiclePose().position.x_val,self.client.simGetVehiclePose().position.y_val]) + self.pose_offset
 
 
 	def reset(self):
