@@ -50,22 +50,22 @@ class DroneAirsim(gym.Env):
 
 		"""Parameters for action and state"""
 		self.action_duration = 1
-		self.yaw_degrees = 20
+		self.yaw_degrees = 30
 		self.num_frames = 5								# Stack 5 frames together
 		self.img_shape = image_shape
 		self.dropped_frames = 0
 
-		self.action_space = spaces.Discrete(3)
+		self.action_space = spaces.Discrete(4)
 		self.action_dim = self.action_space.n
 		self.observation_space = spaces.Box(low=0, high=255,shape=[self.num_frames,self.img_shape[0],self.img_shape[1]],dtype=np.uint8)
 
 
 	"""Helper functions for self.step() """
 
-	def straight(self,speed):
+	def straight(self,speed, reverse):
 		pitch, roll, yaw = airsim.to_eularian_angles(self.client.simGetVehiclePose().orientation)
-		dx = math.cos(yaw) * speed
-		dy = math.sin(yaw) * speed
+		dx = math.cos(yaw) * speed * reverse
+		dy = math.sin(yaw) * speed * reverse
 		x = self.client.simGetVehiclePose().position.x_val
 		y = self.client.simGetVehiclePose().position.y_val
 
@@ -73,6 +73,7 @@ class DroneAirsim(gym.Env):
 		self.client.moveToPositionAsync(x + dx, y + dy, self.z,speed,airsim.DrivetrainType.ForwardOnly)
 		init_time=time.time()
 		return init_time
+
 
 	def yaw_right(self):
 		self.client.rotateByYawRateAsync(self.yaw_degrees, self.action_duration)
@@ -93,7 +94,7 @@ class DroneAirsim(gym.Env):
 
 		if action == 0:
 			# Move in direction of yaw heading with 1m/s for 1s
-			start=self.straight(1)
+			start=self.straight(1,1)
 
 			while self.action_duration > time.time() - start:
 				if self.client.simGetCollisionInfo().has_collided:
@@ -125,6 +126,17 @@ class DroneAirsim(gym.Env):
 
 			self.client.moveByVelocityZAsync(0, 0, self.z,0.5).join()
 			self.client.rotateByYawRateAsync(0, 0.5).join()
+
+		if action == 3:
+			start = self.straight(1, -1)
+
+			while self.action_duration > time.time() - start:
+				if self.client.simGetCollisionInfo().has_collided:
+					collided = True
+				frame_buffer.append(self.client.simGetImages([airsim.ImageRequest("0", airsim.ImageType.Scene, False, False)])[0])
+
+			self.client.moveByVelocityZAsync(0, 0, self.z, 1).join()
+
 
 		return prev_pose,frame_buffer,collided
 
