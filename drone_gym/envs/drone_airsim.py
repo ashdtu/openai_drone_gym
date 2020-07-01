@@ -25,8 +25,6 @@ class DroneAirsim(gym.Env):
 		Start multiple instances of AirSim on different ports(mention "Port" in settings.json)
 		Helps to parallelize sample gathering
 
-		Clone the plugin from this repo:
-
 		:image_shape: Image shape : Set same image shape in settings.json of AirSim
 
 		"""
