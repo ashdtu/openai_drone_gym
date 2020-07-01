@@ -1,7 +1,10 @@
 ## Unreal Engine
 For problems in dynamic collision avoidance, the following map with walking human characters can be used to gather data to train a RL agent. The human characters are set to walk on designed spline paths which can be customised in the .uproj file in the Unreal Editor. The compiled Unreal project is available at this gdrive link: [here](https://drive.google.com/drive/folders/1ZYeQIaZDmKPVhS7VEsjHF7_miHy66nuY?usp=sharing). The project uses the Microsoft AirSIM plugin for the quadcopter and all the asset files can be accessed in the Contents folder.
 
-<img align="left" width = "200" height = "200" src="imgs/1.png">
+<p float="center">
+  <img src="imgs/1.png" width="200" />
+  <img src="imgs/2.png" width="200" /> 
+</p>
 
 ## Installation
 * To use the custom map, do a standard install of Microsoft AirSim and Unreal Engine and then open the project by locating the '.uproj' file in the above link. That should load the project into the Unreal editor, one can then modify or add more static/dynamic objects accordingly in the map.
